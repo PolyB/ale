@@ -2,10 +2,10 @@
 " Description: gcc linter for ada files
 
 call ale#Set('ada_gcc_executable', 'gcc')
-call ale#Set('ada_gcc_options', '')
+call ale#Set('ada_gcc_options', '-gnatc -gnats -gnaty')
 
 function! ale_linters#ada#gcc#GetCommand(buffer) abort
-    return 'gcc -c -x ada -gnatc -gnaty '
+    return 'gcc -c -x ada -gnatx  '
     \   . '-iquote ' . ale#Escape(fnamemodify(bufname(a:buffer), ':p:h'))
     \   . ' ' . ale#Var(a:buffer, 'ada_gcc_options') . ' %s'
 endfunction
@@ -13,7 +13,6 @@ endfunction
 function! ale_linters#ada#gcc#Handle(buffer, lines) abort
     let l:pattern = '^.\+:\(\d\+\):\(\d\+\): \(.\+\)$'
     let l:output = []
-    echo a:lines
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         call add(l:output, {
